@@ -1,0 +1,9 @@
+dist/
+node_modules/
+.n8n/
+.env
+.env.*
+*.log
+.DS_Store
+
+sample-multipage.pdf
