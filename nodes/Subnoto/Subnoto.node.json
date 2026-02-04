@@ -2,7 +2,9 @@
   "node": "n8n-nodes-subnoto.Subnoto",
   "nodeVersion": "1.0",
   "codexVersion": "1.0",
-  "categories": ["Productivity"],
+  "categories": [
+    "Productivity"
+  ],
   "resources": {
     "credentialDocumentation": [
       {

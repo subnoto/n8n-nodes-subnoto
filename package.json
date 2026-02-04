@@ -1,5 +1,5 @@
 {
-  "name": "n8n-nodes-subnoto",
+  "name": "@subnoto/n8n-nodes-subnoto",
   "version": "0.1.0",
   "description": "n8n node to integrate with Subnoto for document signing",
   "license": "MIT",
@@ -11,8 +11,8 @@
     "document"
   ],
   "author": {
-    "name": "",
-    "email": ""
+    "name": "Subnoto",
+    "email": "support@subnoto.com"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,8 @@
     "dev": "n8n-node dev",
     "lint": "n8n-node lint",
     "lint:fix": "n8n-node lint --fix",
+    "format": "prettier --write \"**/*.{ts,js,mjs,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,mjs,json}\"",
     "release": "n8n-node release",
     "prepublishOnly": "n8n-node prerelease"
   },
@@ -36,7 +38,7 @@
   ],
   "n8n": {
     "n8nNodesApiVersion": 1,
-    "strict": true,
+    "strict": false,
     "credentials": [
       "dist/credentials/SubnotoApi.credentials.js"
     ],
