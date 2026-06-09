@@ -44,20 +44,51 @@ Community node installation is only available on self-hosted n8n, not on n8n Clo
 
 ## Operations
 
-- **Upload Document** - Upload a PDF or Word document and create an envelope.
-- **Add Recipients** - Add recipients to an envelope.
-- **Add Blocks** - Add signature blocks to a document.
-- **Send** - Send the envelope to recipients.
-- **List Workspaces** - List all workspaces the API key owner is a member of.
+Workspace UUID is optional on all operations that support it. Leave it empty to use your team's default workspace.
+
+### Envelope
+
+- **Upload Document** — Upload a PDF or Word document and create an envelope.
+- **Upload Document and Send** — Upload, add recipients, optionally add blocks, and send in one step.
+- **Create From Template** — Create an envelope from a template with labeled recipients.
+- **Add Recipients** — Add recipients to an envelope.
+- **Add Blocks** — Add signature, text, text input, or image blocks to a document.
+- **Send** — Send the envelope to recipients.
+- **List** — List envelopes in a workspace (with optional status and tag filters).
+- **Get** — Get envelope details by UUID.
+- **Update** — Update envelope title, tags, expiration, reminders, and invitation message.
+- **Delete** — Delete an envelope.
+
+### Workspace
+
+- **List** — List all workspaces the API key owner is a member of.
+
+### Template
+
+- **List** — List templates accessible by the team.
+
+### Contact
+
+- **Create** — Create one or more contacts.
+- **Get** — Get a contact by email.
+- **List** — List contacts in a workspace.
+- **Update** — Update a contact.
+- **Delete** — Delete contacts by email.
+
+### Util
+
+- **Who Am I** — Get information about the authenticated team and API key. Use this to validate credentials.
 
 ## Credentials
 
 Create a **Subnoto API** credential with:
 
-- **API Base URL** - e.g. `https://enclave.subnoto.com`
-- **Access Key** - Your API access key
-- **Secret Key** - Your API secret key
-- **Unattested Mode** - Optional (default: false)
+- **API Base URL** — e.g. `https://enclave.subnoto.com`
+- **Access Key** — Your API access key
+- **Secret Key** — Your API secret key
+- **Unattested Mode** — Optional (default: false)
+
+The built-in credential test uses a plain HTTP request and may not validate Subnoto credentials reliably (the API requires Oak tunnel encryption and request signing). To verify credentials, run the **Who Am I** operation on the Subnoto node.
 
 ## Development
 

@@ -9,10 +9,16 @@ export class SubnotoApi implements ICredentialType {
 
     documentationUrl = "https://subnoto.com/documentation/developers/sdks/typescript";
 
+    // Links this credential to the Subnoto node, which runs the SDK-based test via testedBy.
+    supportedNodes = ["subnoto"];
+
+    // Required for the Test button in the credentials UI. The actual test is executed by
+    // Subnoto.methods.credentialTest.subnotoApiTest (whoami via the SDK), not this HTTP request.
     test: ICredentialTestRequest = {
         request: {
+            baseURL: "={{$credentials.apiBaseUrl}}",
+            url: "/public/utils/whoami",
             method: "POST",
-            url: "={{$credentials.apiBaseUrl}}/public/workspace/list",
             body: {},
         },
     };
