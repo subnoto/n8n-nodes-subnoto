@@ -4,26 +4,25 @@ import { callSubnotoPost } from "../helpers/callSubnotoPost";
 import { mapRecipients } from "../helpers/mapRecipients";
 import { getOptionalWorkspaceUuid, withOptionalWorkspace } from "../helpers/workspaceBody";
 
-export async function executeAddRecipients(
+export async function executeCreateFromTemplate(
     this: IExecuteFunctions,
     i: number,
     client: SubnotoClient,
     items: INodeExecutionData[],
 ): Promise<IDataObject> {
     const workspaceUuid = getOptionalWorkspaceUuid(this, i);
-    const envelopeUuid = this.getNodeParameter("envelopeUuid", i) as string;
+    const templateUuid = this.getNodeParameter("templateUuid", i) as string;
     const recipientsCollection = this.getNodeParameter("recipients", i) as {
         recipient?: IDataObject[];
     };
     const recipients = mapRecipients(recipientsCollection);
 
-    await callSubnotoPost(this, client, "/public/envelope/add-recipients", {
-        body: withOptionalWorkspace({ envelopeUuid, recipients }, workspaceUuid),
+    const data = await callSubnotoPost(this, client, "/public/envelope/create-from-template", {
+        body: withOptionalWorkspace({ templateUuid, recipients }, workspaceUuid),
     });
 
     return {
-        envelopeUuid,
-        success: true,
-        json: items[i].json,
+        ...(items[i].json as IDataObject),
+        ...(data as IDataObject),
     };
 }

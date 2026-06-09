@@ -3,28 +3,25 @@ import type { SubnotoClient } from "@subnoto/api-client";
 import { callSubnotoPost } from "../helpers/callSubnotoPost";
 import { getOptionalWorkspaceUuid, withOptionalWorkspace } from "../helpers/workspaceBody";
 
-export async function executeSend(
+export async function executeContactDelete(
     this: IExecuteFunctions,
     i: number,
     client: SubnotoClient,
     items: INodeExecutionData[],
 ): Promise<IDataObject> {
     const workspaceUuid = getOptionalWorkspaceUuid(this, i);
-    const envelopeUuid = this.getNodeParameter("envelopeUuid", i) as string;
-    const customInvitationMessage = this.getNodeParameter("customInvitationMessage", i) as string;
+    const emailsRaw = this.getNodeParameter("emails", i) as string;
+    const emails = emailsRaw
+        .split(",")
+        .map((e) => e.trim())
+        .filter(Boolean);
 
-    await callSubnotoPost(this, client, "/public/envelope/send", {
-        body: withOptionalWorkspace(
-            {
-                envelopeUuid,
-                ...(customInvitationMessage ? { customInvitationMessage } : {}),
-            },
-            workspaceUuid,
-        ),
+    await callSubnotoPost(this, client, "/public/contact/delete", {
+        body: withOptionalWorkspace({ emails }, workspaceUuid),
     });
 
     return {
-        envelopeUuid,
+        emails,
         success: true,
         json: items[i].json,
     };

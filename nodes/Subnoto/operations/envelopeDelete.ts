@@ -1,10 +1,9 @@
 import type { IDataObject, IExecuteFunctions, INodeExecutionData } from "n8n-workflow";
 import type { SubnotoClient } from "@subnoto/api-client";
 import { callSubnotoPost } from "../helpers/callSubnotoPost";
-import { mapBlocks } from "../helpers/mapBlocks";
 import { getOptionalWorkspaceUuid, withOptionalWorkspace } from "../helpers/workspaceBody";
 
-export async function executeAddBlocks(
+export async function executeEnvelopeDelete(
     this: IExecuteFunctions,
     i: number,
     client: SubnotoClient,
@@ -12,19 +11,13 @@ export async function executeAddBlocks(
 ): Promise<IDataObject> {
     const workspaceUuid = getOptionalWorkspaceUuid(this, i);
     const envelopeUuid = this.getNodeParameter("envelopeUuid", i) as string;
-    const documentUuid = this.getNodeParameter("documentUuid", i) as string;
-    const blocksCollection = this.getNodeParameter("blocks", i) as {
-        block?: IDataObject[];
-    };
-    const blocks = mapBlocks(blocksCollection);
 
-    await callSubnotoPost(this, client, "/public/envelope/add-blocks", {
-        body: withOptionalWorkspace({ envelopeUuid, documentUuid, blocks }, workspaceUuid),
+    await callSubnotoPost(this, client, "/public/envelope/delete", {
+        body: withOptionalWorkspace({ envelopeUuid }, workspaceUuid),
     });
 
     return {
         envelopeUuid,
-        documentUuid,
         success: true,
         json: items[i].json,
     };
