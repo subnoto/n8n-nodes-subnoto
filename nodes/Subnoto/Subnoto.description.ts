@@ -6,7 +6,7 @@ import { templateFields, templateOperations } from "./descriptions/template.desc
 import { utilsFields, utilsOperations } from "./descriptions/utils.description";
 import { workspaceFields, workspaceOperations } from "./descriptions/workspace.description";
 
-export const subnotoDescription: INodeTypeDescription = {
+const subnotoDescriptionBase: Omit<INodeTypeDescription, "credentials"> = {
     displayName: "Subnoto",
     name: "subnoto",
     icon: "file:Subnoto.svg",
@@ -19,12 +19,6 @@ export const subnotoDescription: INodeTypeDescription = {
     },
     inputs: [NodeConnectionTypes.Main],
     outputs: [NodeConnectionTypes.Main],
-    credentials: [
-        {
-            name: "subnotoApi",
-            required: true,
-        },
-    ],
     properties: [
         {
             displayName: "Resource",
@@ -51,5 +45,16 @@ export const subnotoDescription: INodeTypeDescription = {
         ...templateFields,
         ...contactFields,
         ...utilsFields,
+    ],
+};
+
+export const subnotoDescription: INodeTypeDescription = {
+    ...subnotoDescriptionBase,
+    credentials: [
+        {
+            name: "subnotoApi",
+            required: true,
+            testedBy: "subnotoApiTest",
+        },
     ],
 };

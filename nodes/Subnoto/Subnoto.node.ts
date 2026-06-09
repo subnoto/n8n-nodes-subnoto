@@ -1,6 +1,14 @@
-import type { IDataObject, IExecuteFunctions, INodeExecutionData, INodeType } from "n8n-workflow";
+import type {
+    ICredentialTestFunctions,
+    ICredentialsDecrypted,
+    IDataObject,
+    IExecuteFunctions,
+    INodeCredentialTestResult,
+    INodeExecutionData,
+    INodeType,
+} from "n8n-workflow";
 import { NodeOperationError } from "n8n-workflow";
-import { SubnotoClient } from "@subnoto/api-client";
+import { getErrorMessage } from "@subnoto/api-client";
 
 /* eslint-disable @n8n/community-nodes/icon-validation -- icon is in subnotoDescription (separate module) */
 import { subnotoDescription } from "./Subnoto.description";
@@ -22,6 +30,7 @@ import { executeUploadDocument } from "./operations/uploadDocument";
 import { executeUploadDocumentAndSend } from "./operations/uploadDocumentAndSend";
 import { executeWhoami } from "./operations/whoami";
 import { executeWorkspaceList } from "./operations/workspaceList";
+import { createSubnotoClient } from "./helpers/createSubnotoClient";
 
 const NO_INPUT_OPERATIONS = new Set([
     "workspace:list",
@@ -44,6 +53,46 @@ function pushResults(returnData: IDataObject[], result: IDataObject | IDataObjec
 export class Subnoto implements INodeType {
     description = subnotoDescription;
 
+    methods = {
+        credentialTest: {
+            async subnotoApiTest(
+                this: ICredentialTestFunctions,
+                credential: ICredentialsDecrypted,
+            ): Promise<INodeCredentialTestResult> {
+                const data = credential.data;
+                if (!data?.accessKey || !data?.secretKey) {
+                    return {
+                        status: "Error",
+                        message: "Access key and secret key are required",
+                    };
+                }
+
+                try {
+                    const client = createSubnotoClient(data);
+                    const response = await client.POST("/public/utils/whoami", { body: {} });
+                    if (response.error) {
+                        return {
+                            status: "Error",
+                            message: getErrorMessage(response.error),
+                        };
+                    }
+
+                    const whoami = response.data as { teamName?: string };
+                    const teamName = whoami.teamName ? ` (${whoami.teamName})` : "";
+                    return {
+                        status: "OK",
+                        message: `Connection successful${teamName}`,
+                    };
+                } catch (error) {
+                    return {
+                        status: "Error",
+                        message: getErrorMessage(error),
+                    };
+                }
+            },
+        },
+    };
+
     async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
         const credentials = await this.getCredentials("subnotoApi");
         if (!credentials?.apiBaseUrl || !credentials?.accessKey || !credentials?.secretKey) {
@@ -53,12 +102,7 @@ export class Subnoto implements INodeType {
             );
         }
 
-        const client = new SubnotoClient({
-            apiBaseUrl: credentials.apiBaseUrl as string,
-            accessKey: credentials.accessKey as string,
-            secretKey: credentials.secretKey as string,
-            unattested: (credentials.unattested as boolean) ?? false,
-        });
+        const client = createSubnotoClient(credentials);
 
         const resource = this.getNodeParameter("resource", 0) as string;
         const operation = this.getNodeParameter("operation", 0) as string;
