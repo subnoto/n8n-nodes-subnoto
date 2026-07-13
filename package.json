@@ -16,7 +16,7 @@
     },
     "repository": {
         "type": "git",
-        "url": ""
+        "url": "https://github.com/subnoto/n8n-nodes-subnoto"
     },
     "main": "index.js",
     "engines": {
@@ -47,19 +47,17 @@
         ]
     },
     "dependencies": {
-        "@subnoto/api-client": "2.16.0"
+        "@subnoto/api-client": "2.16.1"
     },
     "devDependencies": {
-        "@n8n/node-cli": "0.33.1",
+        "@n8n/node-cli": "0.39.2",
         "eslint": "9.29.0",
-        "prettier": "3.8.1",
+        "n8n-workflow": "2.16.0",
+        "prettier": "3.9.5",
         "release-it": "19.2.4",
         "typescript": "5.9.3"
     },
     "peerDependencies": {
         "n8n-workflow": "*"
-    },
-    "overrides": {
-        "change-case": "4.1.2"
     }
 }
