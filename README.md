@@ -85,10 +85,10 @@ Create a **Subnoto API** credential with:
 
 - **API Base URL** — e.g. `https://enclave.subnoto.com`
 - **Access Key** — Your API access key
-- **Secret Key** — Your API secret key
-- **Unattested Mode** — Optional (default: false)
+- **Secret Key** — Your API secret key (hex-encoded, characters 0-9 and a-f only)
+- **Unattested Mode** — Optional (default: false). Only enable if advised by Subnoto support.
 
-The built-in credential test uses a plain HTTP request and may not validate Subnoto credentials reliably (the API requires Oak tunnel encryption and request signing). To verify credentials, run the **Who Am I** operation on the Subnoto node.
+The credential **Test** button uses the Subnoto SDK (Oak tunnel + request signing), the same path as node operations. If the test fails, also try the **Who Am I** operation on the Subnoto node to confirm credentials in a workflow.
 
 ## Development
 

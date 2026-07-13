@@ -1,13 +1,14 @@
 import { SubnotoClient } from "@subnoto/api-client";
 import type { ICredentialDataDecryptedObject } from "n8n-workflow";
+import { parseSubnotoCredentials } from "./parseSubnotoCredentials";
 
-export function createSubnotoClient(
-    credentials: ICredentialDataDecryptedObject,
-): SubnotoClient {
+export function createSubnotoClient(credentials: ICredentialDataDecryptedObject): SubnotoClient {
+    const parsed = parseSubnotoCredentials(credentials);
+
     return new SubnotoClient({
-        apiBaseUrl: (credentials.apiBaseUrl as string) || "https://enclave.subnoto.com",
-        accessKey: credentials.accessKey as string,
-        secretKey: credentials.secretKey as string,
-        unattested: (credentials.unattested as boolean) ?? false,
+        apiBaseUrl: parsed.apiBaseUrl,
+        accessKey: parsed.accessKey,
+        secretKey: parsed.secretKey,
+        unattested: parsed.unattested,
     });
 }

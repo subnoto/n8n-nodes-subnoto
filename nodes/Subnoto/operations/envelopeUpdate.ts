@@ -15,8 +15,7 @@ export async function executeEnvelopeUpdate(
     const tagsRaw = this.getNodeParameter("tags", i, "") as string;
     const expirationPeriod = this.getNodeParameter("expirationPeriod", i, 0) as number;
     const reminderFrequencyPeriod = this.getNodeParameter("reminderFrequencyPeriod", i, "") as
-        | string
-        | number;
+        string | number;
     const customInvitationMessage = this.getNodeParameter(
         "customInvitationMessage",
         i,

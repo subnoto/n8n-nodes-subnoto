@@ -8,7 +8,7 @@ import type {
     INodeType,
 } from "n8n-workflow";
 import { NodeOperationError } from "n8n-workflow";
-import { getErrorMessage } from "@subnoto/api-client";
+import { getErrorMessage, type SubnotoClient } from "@subnoto/api-client";
 
 /* eslint-disable @n8n/community-nodes/icon-validation -- icon is in subnotoDescription (separate module) */
 import { subnotoDescription } from "./Subnoto.description";
@@ -84,9 +84,10 @@ export class Subnoto implements INodeType {
                         message: `Connection successful${teamName}`,
                     };
                 } catch (error) {
+                    const message = error instanceof Error ? error.message : getErrorMessage(error);
                     return {
                         status: "Error",
-                        message: getErrorMessage(error),
+                        message,
                     };
                 }
             },
@@ -102,7 +103,13 @@ export class Subnoto implements INodeType {
             );
         }
 
-        const client = createSubnotoClient(credentials);
+        let client: SubnotoClient;
+        try {
+            client = createSubnotoClient(credentials);
+        } catch (error) {
+            const message = error instanceof Error ? error.message : String(error);
+            throw new NodeOperationError(this.getNode(), message);
+        }
 
         const resource = this.getNodeParameter("resource", 0) as string;
         const operation = this.getNodeParameter("operation", 0) as string;

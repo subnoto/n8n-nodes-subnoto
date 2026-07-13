@@ -6,7 +6,6 @@ export default [
         files: ["package.json"],
         rules: {
             "@n8n/community-nodes/no-runtime-dependencies": "off",
-            "@n8n/community-nodes/no-overrides-field": "off",
         },
     },
 ];
