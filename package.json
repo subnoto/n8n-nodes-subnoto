@@ -1,6 +1,6 @@
 {
     "name": "@subnoto/n8n-nodes-subnoto",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "description": "n8n node to integrate with Subnoto for document signing",
     "license": "MIT",
     "homepage": "https://subnoto.com/documentation/developers/sdks/typescript",
