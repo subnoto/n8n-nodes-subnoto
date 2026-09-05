@@ -50,7 +50,7 @@
         "@subnoto/api-client": "2.16.1"
     },
     "devDependencies": {
-        "@n8n/node-cli": "0.39.2",
+        "@n8n/node-cli": "0.46.4",
         "eslint": "9.29.0",
         "n8n-workflow": "2.16.0",
         "prettier": "3.9.5",
